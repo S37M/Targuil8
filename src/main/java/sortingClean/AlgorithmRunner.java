@@ -1,16 +1,37 @@
 package sortingClean;
+
 import java.util.Random;
 
+import jakarta.inject.Inject;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 // TODO: Add dependency injection and annotations to this file
+
 public class AlgorithmRunner {
-    SortingAlgorithm<Integer> quadraticAlgorithm = new BubbleSort();
-    SortingAlgorithm<Integer> nlognAlgorithm = new QuickSort();
-    SortingAlgorithm<Integer> randomAlgorithm1 = makeRandomSortingAlgorithm();
-    SortingAlgorithm<Integer> randomAlgorithm2 = makeRandomSortingAlgorithm();
-    int numberOfElements = 10000;
-    public void runAlgorithms(){
+    SortingAlgorithm<Integer> quadraticAlgorithm;
+    SortingAlgorithm<Integer> nlognAlgorithm;
+    SortingAlgorithm<Integer> randomAlgorithm1;
+    SortingAlgorithm<Integer> randomAlgorithm2;
+    int numberOfElements;
+
+    @Inject
+    public AlgorithmRunner(@Qualifiers.Quadratic SortingAlgorithm<Integer> quadraticAlgorithm,
+                           @Qualifiers.NlogN SortingAlgorithm<Integer> nlognAlgorithm,
+                           @Qualifiers.Random1 SortingAlgorithm<Integer> randomAlgorithm1,
+                           @Qualifiers.Random2 SortingAlgorithm<Integer> randomAlgorithm2,
+                           int numberOfElements) {
+        this.quadraticAlgorithm = quadraticAlgorithm;
+        this.nlognAlgorithm = nlognAlgorithm;
+        this.randomAlgorithm1 = randomAlgorithm1;
+        this.randomAlgorithm2 = randomAlgorithm2;
+        this.numberOfElements = numberOfElements;
+    }
+
+    public void runAlgorithms() {
         Random rand = new Random();
-        Integer[] ints = rand.ints(1,Integer.MAX_VALUE)
+        Integer[] ints = rand.ints(1, Integer.MAX_VALUE)
                 .distinct()
                 .limit(numberOfElements)
                 .boxed()
@@ -25,18 +46,5 @@ public class AlgorithmRunner {
         randomAlgorithm2.sort(intsClone);
     }
 
-    private static SortingAlgorithm<Integer> makeRandomSortingAlgorithm(){
-        Random random = new Random(System.currentTimeMillis());
-        SortingAlgorithm<Integer> sortAlg= null;
-        switch (random.nextInt(4)){
-            case 0: sortAlg = new QuickSort();
-                break;
-            case 1: sortAlg = new MergeSort();
-                break;
-            case 2: sortAlg = new BubbleSort();
-                break;
-            case 3: sortAlg = new InsertionSort();
-        }
-        return sortAlg;
-    }
+
 }
