@@ -10,13 +10,8 @@ import java.util.Random;
 public class MainApp {
     public static WeldContainer container = new Weld().initialize();
     public static void main(String[] args) {
-
-
         AlgorithmRunner algorithmRunner = container.select(AlgorithmRunner.class).get();
-
         algorithmRunner.runAlgorithms();
-
-        //.shutdown();
     }
 
     private static SortingAlgorithm<Integer> makeRandomSortingAlgorithm(){
@@ -57,7 +52,6 @@ public class MainApp {
         return makeRandomSortingAlgorithm();
 
     }
-
     @Produces
     public Integer produceNumberOfElements() {
         return 1000;

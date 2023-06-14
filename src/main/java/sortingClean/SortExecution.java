@@ -4,6 +4,7 @@ public class SortExecution {
     private long executionTime;
     private int executionCount;
     private long startTime;
+    private long endTime;
 
     public SortExecution() {
         this.executionTime = 0L;

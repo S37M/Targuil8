@@ -1,4 +1,5 @@
 package sortingClean;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 
@@ -10,10 +11,12 @@ public class TimingAspect {
     private long startTime;
 
     @Pointcut("execution(* sortingClean.SortingAlgorithm.sort(..)) && target(sortingAlgorithm)")
-    public void sortingAlgorithmMethods(SortingAlgorithm sortingAlgorithm) { }
+    public void sortingAlgorithmMethods(SortingAlgorithm sortingAlgorithm) {
+    }
 
     @Pointcut("execution(* sortingClean.AlgorithmRunner.runAlgorithms(..))")
-    public void runAlgorithmsMethod() { }
+    public void runAlgorithmsMethod() {
+    }
 
     @Before("runAlgorithmsMethod()")
     public void beforeRunAlgorithmsMethod() {
@@ -34,7 +37,9 @@ public class TimingAspect {
 
     @After("runAlgorithmsMethod()")
     public void afterRunAlgorithmsMethod() {
-        long totalTime = System.currentTimeMillis() - startTime;
+        long totalTime = sortExecutionMap.values().stream()
+                .mapToLong(SortExecution::getExecutionTime)
+                .sum();
         System.out.println("Total time of running all sort functions was " + totalTime + " ms");
 
         sortExecutionMap.forEach((k, v) -> {
